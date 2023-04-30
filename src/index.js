@@ -109,6 +109,10 @@ async function onLoadMoreBtnClick() {
 
     if (totalPicturs - itemsCounter < 40) {
       loadMoreBtn.classList.add('is-hide');
+
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
     }
 
     gallery.insertAdjacentHTML('beforeend', createGallery(images));
