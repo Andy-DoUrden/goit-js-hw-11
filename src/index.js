@@ -45,6 +45,8 @@ async function onSubmit(e) {
 
     const images = await fetchData.data.hits;
 
+    const totalPicturs = await fetchData.data.totalHits;
+
     if (images.length === 0) {
       Notify.failure(
         "We're sorry, but you've reached the end of search results."
@@ -54,6 +56,8 @@ async function onSubmit(e) {
     }
 
     gallery.innerHTML = createGallery(images);
+
+    Notify.success(`Hooray! We found ${totalPicturs} images.`);
 
     loadMoreBtn.classList.remove('is-hide');
 
@@ -104,17 +108,27 @@ async function onLoadMoreBtnClick() {
 }
 
 function fetchImages(inputValue) {
-  const searchParams = new URLSearchParams({
+  // const searchParams = new URLSearchParams({
+  //   key: '35900010-e6fba30fbbb71a29105fd08a0',
+  //   q: inputValue,
+  //   image_type: 'photo',
+  //   orientation: 'horizontal',
+  //   safesearch: 'true',
+  //   page: page,
+  //   per_page: 40,
+  // });
+
+  const params = {
     key: '35900010-e6fba30fbbb71a29105fd08a0',
     q: inputValue,
     image_type: 'photo',
     orientation: 'horizontal',
-    safesearch: true,
+    safesearch: 'true',
     page: page,
     per_page: 40,
-  });
+  };
 
-  const fetchedUrl = axios.get(`${BASE_URL}?${searchParams}`);
+  const fetchedUrl = axios.get(`${BASE_URL}`, { params });
 
   return fetchedUrl;
 }
