@@ -45,6 +45,7 @@ async function onSubmit(e) {
 
   if (inputValue === '') {
     Notify.info('Please enter something in the search.');
+    return;
   }
 
   try {
