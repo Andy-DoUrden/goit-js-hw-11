@@ -15,6 +15,8 @@ const BASE_URL = 'https://pixabay.com/api/';
 
 let page = 1;
 
+let itemsCounter = 0;
+
 let inputValue = '';
 
 input.addEventListener('submit', onSubmit);
@@ -33,12 +35,17 @@ async function onSubmit(e) {
 
   inputValue = '';
   page = 1;
+  itemsCounter = 0;
   gallery.innerHTML = '';
   loadMoreBtn.classList.add('is-hide');
 
   const { searchQuery } = e.currentTarget;
 
-  inputValue = searchQuery.value;
+  inputValue = searchQuery.value.trim();
+
+  if (inputValue === '') {
+    Notify.info('Please enter something in the search.');
+  }
 
   try {
     const fetchData = await fetchImages(inputValue, page);
@@ -55,11 +62,17 @@ async function onSubmit(e) {
       return;
     }
 
+    itemsCounter += 40;
+
     gallery.innerHTML = createGallery(images);
 
     Notify.success(`Hooray! We found ${totalPicturs} images.`);
 
     loadMoreBtn.classList.remove('is-hide');
+
+    if (totalPicturs < 40) {
+      loadMoreBtn.classList.add('is-hide');
+    }
 
     lightbox.refresh();
 
@@ -77,11 +90,14 @@ async function onSubmit(e) {
 
 async function onLoadMoreBtnClick() {
   page += 1;
+  itemsCounter += 40;
 
   try {
     const fetchData = await fetchImages(inputValue, page);
 
     const images = await fetchData.data.hits;
+
+    const totalPicturs = fetchData.data.totalHits;
 
     if (images.length === 0) {
       Notify.failure(
@@ -89,6 +105,10 @@ async function onLoadMoreBtnClick() {
       );
 
       return;
+    }
+
+    if (totalPicturs - itemsCounter < 40) {
+      loadMoreBtn.classList.add('is-hide');
     }
 
     gallery.insertAdjacentHTML('beforeend', createGallery(images));
