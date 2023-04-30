@@ -60,16 +60,14 @@ async function onSubmit(e) {
     lightbox.refresh();
 
     autoScroll();
-  } catch {
-    error => {
-      console.log(error);
+  } catch (error) {
+    console.log(error.message);
 
-      loadMoreBtn.classList.add('is-hide');
+    loadMoreBtn.classList.add('is-hide');
 
-      Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    };
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
   }
 }
 
@@ -94,16 +92,14 @@ async function onLoadMoreBtnClick() {
     lightbox.refresh();
 
     autoScroll();
-  } catch {
-    error => {
-      console.log(error);
+  } catch (error) {
+    console.log(error.message);
 
-      loadMoreBtn.classList.add('is-hide');
+    loadMoreBtn.classList.add('is-hide');
 
-      Notify.failure(
-        "We're sorry, but you've reached the end of search results."
-      );
-    };
+    Notify.failure(
+      "We're sorry, but you've reached the end of search results."
+    );
   }
 }
 
