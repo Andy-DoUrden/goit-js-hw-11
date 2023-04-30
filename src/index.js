@@ -94,11 +94,12 @@ function fetchImages(inputValue) {
     per_page: 40,
   });
 
-  return axios.get(`${BASE_URL}?${searchParams}`);
+  const fetchedUrl = axios.get(`${BASE_URL}?${searchParams}`);
+  return fetchedUrl;
 }
 
 function createGallery(images) {
-  return (html = images
+  const generatedHtml = (html = images
     .map(
       ({
         webformatURL,
@@ -109,7 +110,7 @@ function createGallery(images) {
         comments,
         downloads,
       }) => {
-        return `
+        const htmlPart = `
         <a class="photo-card" href=${largeImageURL}>
           <img class="gallery-img" src="${webformatURL}" alt="${tags}" loading="lazy" />
           <div class="info">
@@ -128,9 +129,13 @@ function createGallery(images) {
           </div>
         </a>
         `;
+
+        return htmlPart;
       }
     )
     .join(''));
+
+  return generatedHtml;
 }
 
 function autoScroll() {
