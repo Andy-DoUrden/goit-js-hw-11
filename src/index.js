@@ -41,11 +41,11 @@ async function onSubmit(e) {
   inputValue = searchQuery.value;
 
   try {
-    const fetchData = await fetchImages(inputValue);
+    const fetchData = await fetchImages(inputValue, page);
 
-    const images = await fetchData.data.hits;
+    const images = fetchData.data.hits;
 
-    const totalPicturs = await fetchData.data.totalHits;
+    const totalPicturs = fetchData.data.totalHits;
 
     if (images.length === 0) {
       Notify.failure(
@@ -79,7 +79,7 @@ async function onLoadMoreBtnClick() {
   page += 1;
 
   try {
-    const fetchData = await fetchImages(inputValue);
+    const fetchData = await fetchImages(inputValue, page);
 
     const images = await fetchData.data.hits;
 
@@ -107,7 +107,9 @@ async function onLoadMoreBtnClick() {
   }
 }
 
-function fetchImages(inputValue) {
+// function onButtonEvent() {}
+
+function fetchImages(inputValue, localPage) {
   // const searchParams = new URLSearchParams({
   //   key: '35900010-e6fba30fbbb71a29105fd08a0',
   //   q: inputValue,
@@ -124,7 +126,7 @@ function fetchImages(inputValue) {
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: 'true',
-    page: page,
+    page: localPage,
     per_page: 40,
   };
 
@@ -134,7 +136,7 @@ function fetchImages(inputValue) {
 }
 
 function createGallery(images) {
-  const generatedHtml = (html = images
+  const generatedHtml = images
     .map(
       ({
         webformatURL,
@@ -168,7 +170,7 @@ function createGallery(images) {
         return htmlPart;
       }
     )
-    .join(''));
+    .join('');
 
   return generatedHtml;
 }

@@ -68,6 +68,11 @@ body {
   box-shadow: 0 5px 10px 5px #00000088;
   text-decoration: none;
   color: #000;
+  transition: .3s;
+}
+
+.photo-card:hover {
+  box-shadow: 0 5px 10px 8px #000000aa;
 }
 
 .gallery-img {
