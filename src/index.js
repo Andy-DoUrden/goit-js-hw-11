@@ -45,6 +45,14 @@ async function onSubmit(e) {
 
     const images = await fetchData.data.hits;
 
+    if (images.length === 0) {
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
+
+      return;
+    }
+
     gallery.innerHTML = createGallery(images);
 
     loadMoreBtn.classList.remove('is-hide');
@@ -53,11 +61,15 @@ async function onSubmit(e) {
 
     autoScroll();
   } catch {
-    loadMoreBtn.classList.add('is-hide');
+    error => {
+      console.log(error);
 
-    Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
+      loadMoreBtn.classList.add('is-hide');
+
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    };
   }
 }
 
@@ -69,17 +81,29 @@ async function onLoadMoreBtnClick() {
 
     const images = await fetchData.data.hits;
 
+    if (images.length === 0) {
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
+
+      return;
+    }
+
     gallery.insertAdjacentHTML('beforeend', createGallery(images));
 
     lightbox.refresh();
 
     autoScroll();
   } catch {
-    loadMoreBtn.classList.add('is-hide');
+    error => {
+      console.log(error);
 
-    Notify.failure(
-      "We're sorry, but you've reached the end of search results."
-    );
+      loadMoreBtn.classList.add('is-hide');
+
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
+    };
   }
 }
 
@@ -95,6 +119,7 @@ function fetchImages(inputValue) {
   });
 
   const fetchedUrl = axios.get(`${BASE_URL}?${searchParams}`);
+
   return fetchedUrl;
 }
 
